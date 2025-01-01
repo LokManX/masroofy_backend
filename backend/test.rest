@@ -1,6 +1,6 @@
 ###### install rest client extension in vs code first ######
 
-POST  http://127.0.0.1:8000/api/income/
+POST  http://127.0.0.1:8000/api/login/
 Content-Type: application/json
 
 {
@@ -19,3 +19,21 @@ Content-Type: application/json
     "first_name": "userOne",
     "last_name": "userOne"
 }
+
+###
+
+POST http://127.0.0.1:8000/api/income/create/
+Content-Type: application/json
+Authorization: Token c9fa2d351b3a5ba2dea689e7c99d9cc93245dd99
+
+{
+    "amount": "60000",
+    "category": "other",
+    "date": "2024-12-28",
+    "name": "salary",
+    "note": "siuuuuuuu"
+}
+
+###
+GEt http://127.0.0.1:8000/api/products/
+Content-Type: application/json

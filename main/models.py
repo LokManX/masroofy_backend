@@ -33,7 +33,13 @@ class User(AbstractBaseUser):
         return self.first_name + ' ' + self.last_name
     
 class Category(models.Model):
-    name = models.CharField(max_length=30)
+    TYPE_CHOICES = [
+        ('income', 'Income'),
+        ('expense', 'Expense'),
+    ]
+    name = models.CharField(max_length=30, unique=True)
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES, null = True)
+
 
 class Transaction(models.Model):
     TYPE_CHOICES = [
@@ -53,9 +59,10 @@ class Product(models.Model):
 
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150, default='Income')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=False)
-    category = models.CharField(max_length=150)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     description = models.TextField(null=True, blank=True, default=None)
 
 class Expense(models.Model):

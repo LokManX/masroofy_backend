@@ -11,7 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 class IsOwner(BasePermission):
     message = "you don't have the permission to access this object"
 
-    def has_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj):
         return request.user == obj.user
 
 
@@ -44,8 +44,8 @@ class IncomeCreateView(CreateAPIView):
     queryset = Income.objects.all()
     serializer_class = IncomeSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user = self.request.user)
+    # def perform_create(self, serializer):   ### it creates the object normally but still giving the user field is required error
+    #     serializer.save(user = self.request.user)
 
 class IncomeListView(ListAPIView):
     authentication_classes = [TokenAuthentication]
@@ -55,7 +55,7 @@ class IncomeListView(ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Income.objects.filter(user = user)
+        return Income.objects.filter(user = user).order_by('-date', '-id')
 
 class IncomeDetailView(RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
@@ -71,6 +71,31 @@ class IncomeUpdateView(UpdateAPIView):
     serializer_class = IncomeSerializer
     lookup_field = 'id'
 
+    # def put(self, request, id):
+    #     try:
+    #         income = Income.objects.get(id=id, user=request.user)
+    #     except Income.DoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    #     serializer = IncomeSerializer(income, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # def patch(self, request, id):
+    #     try:
+    #         income = Income.objects.get(id=id, user=request.user)
+    #     except Income.DoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    #     serializer = IncomeSerializer(income, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class IncomeDeleteView(DestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsOwner]
@@ -78,6 +103,7 @@ class IncomeDeleteView(DestroyAPIView):
     serializer_class = IncomeSerializer
     lookup_field = 'id'
 
+   
 
 class ExpenseCreateView(CreateAPIView):
     authentication_classes = [TokenAuthentication]
@@ -96,7 +122,7 @@ class ExpenseListView(ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Expense.objects.filter(user = user)
+        return Expense.objects.filter(user = user).order_by('-date', '-id')
 
 class ExpenseDetailView(RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
@@ -120,14 +146,12 @@ class ExpenseDeleteView(DestroyAPIView):
     lookup_field = 'id'
 
 class CategoryListView(ListAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 class ProductListView(ListAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 

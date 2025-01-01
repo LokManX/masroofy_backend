@@ -5,7 +5,7 @@ urlpatterns = [
     # path('users/', UsersList.as_view())
     path('login/', LoginView.as_view()),
     path('signup/', SignupView.as_view()),
-    path('income/', IncomeListView.as_view(), name='income_list'),
+    path('incomes/', IncomeListView.as_view(), name='income_list'),
     path('income/create/', IncomeCreateView.as_view(), name='income_create'),
     path('income/<int:id>/', IncomeDetailView.as_view(), name='income_detail'),
     path('income/<int:id>/update/', IncomeUpdateView.as_view(), name='income_update'),
